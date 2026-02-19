@@ -1,0 +1,48 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-bg: #0f0f12;
+  --color-surface: #1a1a1f;
+  --color-surface-hover: #23232a;
+  --color-border: #2d2d35;
+  --color-text: #e8e8ec;
+  --color-text-muted: #8b8b94;
+  --color-accent: #7c6cf9;
+  --color-accent-hover: #8d7cff;
+  --color-danger: #e8596c;
+  --color-danger-hover: #f06b7d;
+  --color-success: #4ec9b0;
+  --color-warning: #d4a84b;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  --transition: 0.2s ease;
+}
+
+body {
+  margin: 0;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+}

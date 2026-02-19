@@ -1,0 +1,56 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.field select,
+.field input {
+  padding: 0.5rem 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  min-width: 140px;
+}
+
+.field select:focus,
+.field input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.field select::placeholder,
+.field input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.clearBtn {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  align-self: flex-end;
+}
+
+.clearBtn:hover {
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
