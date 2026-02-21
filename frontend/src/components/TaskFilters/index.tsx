@@ -25,10 +25,11 @@ export function TaskFilters({ filters, statuses, priorities, onChange }: TaskFil
 	return (
 		<div className={styles.filters}>
 			<div className={styles.field}>
-				<label>Status</label>
+				<label htmlFor="status-select">Status</label>
 				<select
 					value={filters.status_id ?? ''}
 					onChange={(e) => update('status_id', e.target.value ? Number(e.target.value) : undefined)}
+					id='status-select'
 				>
 					<option value="">All</option>
 					{statuses.map((s) => (
@@ -39,10 +40,11 @@ export function TaskFilters({ filters, statuses, priorities, onChange }: TaskFil
 				</select>
 			</div>
 			<div className={styles.field}>
-				<label>Priority</label>
+				<label htmlFor='priority-select'>Priority</label>
 				<select
 					value={filters.priority_id ?? ''}
 					onChange={(e) => update('priority_id', e.target.value ? Number(e.target.value) : undefined)}
+					id='priority-select'
 				>
 					<option value="">All</option>
 					{priorities.map((p) => (

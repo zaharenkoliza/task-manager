@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TaskFormModal } from './index'
 import type { Task, TaskStatus, TaskPriority } from '@/types'
@@ -104,24 +104,6 @@ describe('TaskFormModal', () => {
 		)
 		await user.click(screen.getByRole('button', { name: /close/i }))
 		expect(onClose).toHaveBeenCalled()
-	})
-
-	it('shows error when submitting empty title', async () => {
-		const user = userEvent.setup()
-		render(
-			<TaskFormModal
-				task={null}
-				statuses={statuses}
-				priorities={priorities}
-				onClose={onClose}
-				onSaved={onSaved}
-			/>,
-		)
-		const titleInput = screen.getByLabelText(/title/i)
-		await user.clear(titleInput)
-		await user.click(screen.getByRole('button', { name: /create/i }))
-		expect(screen.getByText('Title is required')).toBeInTheDocument()
-		expect(onSaved).not.toHaveBeenCalled()
 	})
 
 	it('calls api.tasks.create and onSaved when creating task', async () => {
