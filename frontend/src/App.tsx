@@ -22,7 +22,7 @@ function App() {
 				setStatuses(s)
 				setPriorities(p)
 			})
-			.catch((e) => setError(String(e?.message ?? e)))
+			.catch((e) => setError(String(e instanceof Error ? e.message : String(e))))
 	}, [])
 
 	useEffect(() => {
@@ -33,12 +33,12 @@ function App() {
 				setTasks(data)
 				setError(null)
 			})
-			.catch((e) => setError(String(e?.message ?? e)))
+			.catch((e) => setError(String(e instanceof Error ? e.message : String(e))))
 			.finally(() => setLoading(false))
 	}, [filters])
 
 	const refreshTasks = () =>
-		api.tasks.list(filters).then(setTasks).catch((e) => setError(String(e?.message ?? e)))
+		api.tasks.list(filters).then(setTasks).catch((e) => setError(String(e instanceof Error ? e.message : String(e))))
 
 	const openCreate = () => {
 		setEditingTask(null)
@@ -61,7 +61,7 @@ function App() {
 			await api.tasks.delete(id)
 			refreshTasks()
 		} catch (e) {
-			setError(String(e?.message ?? e))
+			setError(String(e instanceof Error ? e.message : String(e)))
 		}
 	}
 
