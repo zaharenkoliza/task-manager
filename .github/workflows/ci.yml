@@ -1,0 +1,17 @@
+name: CI Pipeline
+
+on: push
+
+jobs:
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm install
+      - name: Build Project
+        run: |
+          cd frontend
+          npm run build
