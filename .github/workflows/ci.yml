@@ -75,11 +75,11 @@ jobs:
         run: |
           ls -R
 
-      - name: Run tests
+      - name: Run tests with coverage
         env:
           DEBUG: "false"
         run: |
-          pytest -q
+          pytest --cov=src/app --cov-report=term-missing
 
   frontend-build:
     name: Frontend – build
@@ -129,5 +129,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run unit tests
-        run: npm run test:run -- --runInBand
+      - name: Run unit tests with coverage
+        run: npm run test:coverage -- --runInBand

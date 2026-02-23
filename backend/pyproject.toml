@@ -9,3 +9,17 @@ dependencies = []
 testpaths = ["tests"]
 pythonpath = ["src"]
 
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+include = "src/.+\\.pyi?$|tests/.+\\.pyi?$"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = []
+
