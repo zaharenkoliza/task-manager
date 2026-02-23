@@ -1,0 +1,11 @@
+[project]
+name = "task-manager-backend"
+version = "0.1.0"
+description = "FastAPI backend for task manager lab work."
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
