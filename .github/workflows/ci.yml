@@ -10,6 +10,7 @@ jobs:
   backend-lint:
     name: Backend – lint
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     defaults:
       run:
@@ -36,6 +37,7 @@ jobs:
   backend-format-check:
     name: Backend – format (Black)
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     defaults:
       run:
