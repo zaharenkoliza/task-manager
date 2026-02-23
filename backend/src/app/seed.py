@@ -42,3 +42,4 @@ async def seed_all() -> None:
         await seed_statuses(session)
         await seed_priorities(session)
         await session.commit()
+
