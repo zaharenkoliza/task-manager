@@ -4,73 +4,68 @@ from pathlib import Path
 
 import pytest
 
-from app.config import (
-    DatabaseSettings,
-    Settings,
-    _deep_merge,
-    _load_yaml,
-)
+from app.config import DatabaseSettings, Settings, deep_merge, load_yaml
 
 
 class TestDeepMerge:
-    """Tests for _deep_merge function."""
+    """Tests for deep_merge function."""
 
     def test_merge_empty_dicts(self):
         """Merging empty dicts returns empty dict."""
-        assert _deep_merge({}, {}) == {}
+        assert deep_merge({}, {}) == {}
 
     def test_merge_override_into_empty(self):
         """Override values added to empty base."""
         base = {}
         override = {"key": "value"}
-        assert _deep_merge(base, override) == {"key": "value"}
+        assert deep_merge(base, override) == {"key": "value"}
 
     def test_merge_empty_override(self):
         """Empty override keeps base values."""
         base = {"key": "value"}
         override = {}
-        assert _deep_merge(base, override) == {"key": "value"}
+        assert deep_merge(base, override) == {"key": "value"}
 
     def test_merge_simple_values(self):
         """Override replaces simple values."""
         base = {"a": 1, "b": 2}
         override = {"b": 3, "c": 4}
-        assert _deep_merge(base, override) == {"a": 1, "b": 3, "c": 4}
+        assert deep_merge(base, override) == {"a": 1, "b": 3, "c": 4}
 
     def test_merge_nested_dicts(self):
         """Nested dicts are merged recursively."""
         base = {"db": {"host": "localhost", "port": 5432}}
         override = {"db": {"port": 5433, "name": "test"}}
-        result = _deep_merge(base, override)
+        result = deep_merge(base, override)
         assert result == {"db": {"host": "localhost", "port": 5433, "name": "test"}}
 
     def test_merge_deeply_nested(self):
         """Deep nesting is handled correctly."""
         base = {"a": {"b": {"c": 1, "d": 2}}}
         override = {"a": {"b": {"d": 3, "e": 4}}}
-        result = _deep_merge(base, override)
+        result = deep_merge(base, override)
         assert result == {"a": {"b": {"c": 1, "d": 3, "e": 4}}}
 
     def test_override_dict_with_value(self):
         """Non-dict override replaces dict."""
         base = {"a": {"b": 1}}
         override = {"a": "replaced"}
-        assert _deep_merge(base, override) == {"a": "replaced"}
+        assert deep_merge(base, override) == {"a": "replaced"}
 
     def test_override_value_with_dict(self):
         """Dict override replaces non-dict."""
         base = {"a": "value"}
         override = {"a": {"b": 1}}
-        assert _deep_merge(base, override) == {"a": {"b": 1}}
+        assert deep_merge(base, override) == {"a": {"b": 1}}
 
 
 class TestLoadYaml:
-    """Tests for _load_yaml function."""
+    """Tests for load_yaml function."""
 
     def test_load_nonexistent_file(self):
         """Nonexistent file returns empty dict."""
         path = Path("/nonexistent/path/file.yaml")
-        assert _load_yaml(path) == {}
+        assert load_yaml(path) == {}
 
     def test_load_valid_yaml(self):
         """Valid YAML file is loaded correctly."""
@@ -80,7 +75,7 @@ class TestLoadYaml:
             path = Path(f.name)
 
         try:
-            result = _load_yaml(path)
+            result = load_yaml(path)
             assert result == {"debug": True, "database": {"host": "testhost"}}
         finally:
             path.unlink()
@@ -93,7 +88,7 @@ class TestLoadYaml:
             path = Path(f.name)
 
         try:
-            result = _load_yaml(path)
+            result = load_yaml(path)
             assert result == {}
         finally:
             path.unlink()
@@ -106,7 +101,7 @@ class TestLoadYaml:
             path = Path(f.name)
 
         try:
-            result = _load_yaml(path)
+            result = load_yaml(path)
             assert result == {}
         finally:
             path.unlink()
