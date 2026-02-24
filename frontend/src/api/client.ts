@@ -1,7 +1,5 @@
 import type { Task, TaskCreateInput, TaskFilters, TaskPriority, TaskStatus, TaskUpdateInput } from '@/types'
-import { mockApi } from './mock'
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_API === 'true'
 const BASE = '/api'
 
 async function handleResponse<T>(res: Response): Promise<T> {
@@ -16,7 +14,7 @@ async function handleResponse<T>(res: Response): Promise<T> {
 	return res.text() as unknown as T
 }
 
-const realApi = {
+export const api = {
 	statuses: {
 		list: () => fetch(`${BASE}/tasks/statuses`).then((r) => handleResponse<TaskStatus[]>(r)),
 		get: (id: number) => fetch(`${BASE}/tasks/statuses/${id}`).then((r) => handleResponse<TaskStatus>(r)),
@@ -54,5 +52,3 @@ const realApi = {
 			fetch(`${BASE}/tasks/${id}`, { method: 'DELETE' }).then((r) => handleResponse<void>(r)),
 	},
 }
-
-export const api = USE_MOCK ? mockApi : realApi
