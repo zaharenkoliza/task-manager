@@ -31,19 +31,3 @@ API requests to `/api` are proxied to `http://localhost:8000`. Run the backend o
 ```bash
 npm run build
 ```
-
-## Mock mode
-
-While the backend is in development, mock data is used. Create `.env` with:
-
-```
-VITE_USE_MOCK_API=true
-```
-
-To switch to the real backend, set `VITE_USE_MOCK_API=false` or remove the variable.
-
-## API
-
-- **Statuses** – `GET /api/tasks/statuses` (To Do, In Progress, Done)
-- **Priorities** – `GET /api/tasks/priorities` (High, Normal, Low)
-- **Tasks** – full CRUD + filters (status_id, priority_id, start_time, end_time)
