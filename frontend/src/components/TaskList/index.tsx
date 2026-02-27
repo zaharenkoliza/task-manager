@@ -67,7 +67,7 @@ export function TaskList({ tasks, statuses, priorities, onEdit, onDelete }: Task
 						</div>
 						<div className={styles.actions}>
 							<span className={styles.dates}>
-								{formatDate(task.start_time)} → {formatDate(task.end_time)}
+								{task.start_time && formatDate(task.start_time)}{task.end_time && ` → ${formatDate(task.end_time)}`}
 							</span>
 							<button className={styles.btn} onClick={() => onEdit(task)}>
                 Edit
