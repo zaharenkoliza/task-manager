@@ -1,0 +1,40 @@
+services:
+  # db:
+  #   image: postgres:16-alpine
+  #   container_name: task-manager-db
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: admin
+  #     POSTGRES_DB: tasks_db
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   container_name: task-manager-backend
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     # Match app.config.DatabaseSettings defaults and point to docker service
+  #     DATABASE__HOST: db
+  #     DATABASE__PORT: 5432
+  #     DATABASE__USER: postgres
+  #     DATABASE__PASSWORD: admin
+  #     DATABASE__NAME: tasks_db
+  #   ports:
+  #     - "8000:8000"
+
+  frontend:
+    image: task-manager-frontend
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+# volumes:
+#   db-data:
