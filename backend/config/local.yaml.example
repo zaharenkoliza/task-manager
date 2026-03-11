@@ -1,9 +1,9 @@
-debug: false
+debug: true
 
 database:
-  host: localhost
+  host: db
   port: 5432
   user: postgres
-  password: postgres
+  password: admin
   name: tasks_db
 
