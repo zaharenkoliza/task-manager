@@ -9,7 +9,7 @@ terraform {
 
 # Провайдер - Yandex Cloud
 provider "yandex" {
-  service_account_key_file = "~/terraform-key.json"
+  service_account_key_file = "/home/diana/terraform-key.json"
   folder_id                = var.folder_id
   zone                     = "ru-central1-a"
 }
