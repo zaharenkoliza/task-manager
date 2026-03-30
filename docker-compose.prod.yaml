@@ -10,12 +10,18 @@ services:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     image: cr.yandex/crp10m317mg7ppiikck3/task-manager-backend:latest
     container_name: task-manager-backend
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8000:8000"
 
