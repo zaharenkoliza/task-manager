@@ -2,7 +2,10 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
-COPY . .
+COPY index.html ./
+COPY src/ ./src/
+COPY public/ ./public/
+COPY vite.config.ts tsconfig.json tsconfig.node.json ./
 RUN npm run build
 
 FROM nginx:1.27-alpine

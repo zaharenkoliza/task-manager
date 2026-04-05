@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.config import settings
 from app.database import create_tables
@@ -27,6 +28,8 @@ app = FastAPI(
 app.include_router(statuses.router, prefix="/api")
 app.include_router(priorities.router, prefix="/api")
 app.include_router(tasks.router, prefix="/api")
+
+Instrumentator().instrument(app).expose(app)
 
 
 @app.get("/health")

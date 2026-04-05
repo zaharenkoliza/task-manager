@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: task-manager
+data:
+  local.yaml: |
+    debug: false
+
+    database:
+      host: postgres
+      port: 5432
+      user: postgres
+      password: admin
+      name: tasks_db

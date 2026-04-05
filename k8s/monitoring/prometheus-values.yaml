@@ -1,0 +1,87 @@
+# Helm values для kube-prometheus-stack
+# Установка:
+#   helm install prometheus prometheus-community/kube-prometheus-stack \
+#     -n monitoring --create-namespace -f k8s/monitoring/prometheus-values.yaml
+
+prometheus:
+  prometheusSpec:
+    scrapeInterval: 15s
+    evaluationInterval: 15s
+
+    # Разрешить Prometheus смотреть во все namespace-ы
+    podMonitorNamespaceSelector:
+      matchLabels: {}
+    serviceMonitorNamespaceSelector:
+      matchLabels: {}
+
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+
+    # Scrape подов бэкенда по аннотациям prometheus.io/scrape=true
+    additionalScrapeConfigs:
+      - job_name: task-manager-backend
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names:
+                - task-manager
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: "true"
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: (.+):(?:\d+);(\d+)
+            replacement: $1:$2
+          - source_labels: [__meta_kubernetes_pod_name]
+            target_label: pod
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: namespace
+
+grafana:
+  enabled: true
+  adminPassword: admin
+
+  persistence:
+    enabled: true
+    size: 1Gi
+
+  service:
+    type: LoadBalancer
+
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: default
+          orgId: 1
+          folder: ""
+          type: file
+          options:
+            path: /var/lib/grafana/dashboards/default
+
+  dashboards:
+    default:
+      # Kubernetes Pods — CPU/RAM/Network по подам
+      kubernetes-pods:
+        gnetId: 6417
+        revision: 1
+        datasource: Prometheus
+      # FastAPI Observability — запросы, latency, ошибки по эндпоинтам
+      fastapi-observability:
+        gnetId: 16110
+        revision: 1
+        datasource: Prometheus
+
+alertmanager:
+  enabled: false
