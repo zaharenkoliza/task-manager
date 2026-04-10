@@ -14,13 +14,8 @@ prometheus:
     serviceMonitorNamespaceSelector:
       matchLabels: {}
 
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 5Gi
+    # Без persistence — для лабы достаточно, не будет проблем при смене узлов
+    storageSpec: {}
 
     # Scrape подов бэкенда по аннотациям prometheus.io/scrape=true
     additionalScrapeConfigs:
