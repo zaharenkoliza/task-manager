@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: task-manager
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/zaharenkoliza/task-manager
+    targetRevision: HEAD
+    path: k8s
+    directory:
+      recurse: true
+      exclude: '{monitoring/**,argocd/**}'
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: task-manager
+  syncPolicy:
+    automated:
+      prune: true      # удалять ресурсы которых нет в репо
+      selfHeal: true   # восстанавливать если кто-то изменил руками
+    syncOptions:
+      - CreateNamespace=true
