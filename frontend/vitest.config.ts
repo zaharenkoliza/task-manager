@@ -13,7 +13,7 @@ export default defineConfig({
 		globals: true,
 		coverage: {
 			provider: 'v8',
-			reporter: ['text', 'text-summary', 'html'],
+			reporter: ['text', 'text-summary', 'html', 'lcov'],
 			include: ['src/**/*.{ts,tsx}'],
 			exclude: ['src/test/**', 'src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/main.tsx', 'src/vite-env.d.ts'],
 		},
