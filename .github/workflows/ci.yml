@@ -99,15 +99,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Show config files
-        run: |
-          ls -R
-
       - name: Run tests with coverage
         env:
           DEBUG: "false"
         run: |
-          pytest --cov=src/app --cov-report=term-missing
+          pytest --cov=src/app --cov-report=term-missing --cov-report=xml:coverage.xml --cov-fail-under=80
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: backend/coverage.xml
 
   backend-build:
     name: Backend – build
@@ -188,10 +190,35 @@ jobs:
       - name: Build frontend
         run: npm run build
 
+  sonarcloud-analysis:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+    needs: backend-test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report
+          path: backend
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: backend
+
   push-to-registry:
     name: Push images to Yandex Container Registry
     runs-on: ubuntu-latest
-    needs: [backend-build, frontend-build]
+    needs: [backend-build, frontend-build, sonarcloud-analysis]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
@@ -226,3 +253,30 @@ jobs:
             cr.yandex/crp10m317mg7ppiikck3/task-manager-frontend:latest
             cr.yandex/crp10m317mg7ppiikck3/task-manager-frontend:${{ github.sha }}
 
+  notify-telegram:
+    name: Notify Telegram
+    runs-on: ubuntu-latest
+    needs: [backend-lint, backend-format-check, backend-test, sonarcloud-analysis, push-to-registry]
+    if: always()
+
+    steps:
+      - name: Send Telegram notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          format: markdown
+          message: |
+            *Task Manager CI/CD*
+
+            Репозиторий: `${{ github.repository }}`
+            Ветка: `${{ github.ref_name }}`
+            Коммит: `${{ github.sha }}`
+            Автор: ${{ github.actor }}
+
+            *Результаты jobs:*
+            Lint: ${{ needs.backend-lint.result == 'success' && '✅' || '❌' }}
+            Format: ${{ needs.backend-format-check.result == 'success' && '✅' || '❌' }}
+            Tests \(покрытие ≥80%\): ${{ needs.backend-test.result == 'success' && '✅' || '❌' }}
+            SonarCloud: ${{ needs.sonarcloud-analysis.result == 'success' && '✅' || '❌' }}
+            Push to Registry: ${{ needs.push-to-registry.result == 'success' && '✅' || needs.push-to-registry.result == 'skipped' && '⏭️' || '❌' }}
