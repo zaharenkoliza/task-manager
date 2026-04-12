@@ -308,7 +308,7 @@ jobs:
             *Результаты jobs:*
             Backend Lint: ${{ needs.backend-lint.result == 'success' && '✅' || needs.backend-lint.result == 'failure' && '❌' || '⏭️' }}
             Backend Format: ${{ needs.backend-format-check.result == 'success' && '✅' || needs.backend-format-check.result == 'failure' && '❌' || '⏭️' }}
-            Backend Tests \(coverage ≥80%\): ${{ needs.backend-test.result == 'success' && '✅' || needs.backend-test.result == 'failure' && '❌' || '⏭️' }}
+            Backend Tests: ${{ needs.backend-test.result == 'success' && '✅' || needs.backend-test.result == 'failure' && '❌' || '⏭️' }}
             Backend Build: ${{ needs.backend-build.result == 'success' && '✅' || needs.backend-build.result == 'failure' && '❌' || '⏭️' }}
             Frontend Tests: ${{ needs.frontend-test.result == 'success' && '✅' || needs.frontend-test.result == 'failure' && '❌' || '⏭️' }}
             Frontend Build: ${{ needs.frontend-build.result == 'success' && '✅' || needs.frontend-build.result == 'failure' && '❌' || '⏭️' }}
