@@ -98,7 +98,7 @@ export function TaskFormModal({ task, statuses, priorities, onClose, onSaved }: 
 	return (
 		<div
 			className={styles.overlay}
-			onClick={onClose}
+			onClick={(e) => e.target === e.currentTarget && onClose()}
 			onKeyDown={(e) => e.key === 'Escape' && onClose()}
 			role="button"
 			tabIndex={0}
@@ -106,8 +106,6 @@ export function TaskFormModal({ task, statuses, priorities, onClose, onSaved }: 
 		>
 			<div
 				className={styles.modal}
-				onClick={(e) => e.stopPropagation()}
-				onKeyDown={(e) => e.stopPropagation()}
 				role="dialog"
 				aria-modal="true"
 			>
