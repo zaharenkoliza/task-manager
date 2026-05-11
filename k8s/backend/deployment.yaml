@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: cr.yandex/crp10m317mg7ppiikck3/task-manager-backend:fb2c3231331838e184d8e2445be82d0eeb4dda68
+          image: cr.yandex/crp10m317mg7ppiikck3/task-manager-backend:86f449fa12de1bb896ae3d18a57721ef0f5f45af
           ports:
             - containerPort: 8000
           volumeMounts:
