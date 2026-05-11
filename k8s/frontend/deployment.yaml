@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: cr.yandex/crp10m317mg7ppiikck3/task-manager-frontend:0cc3da33b597417c3426cef66202b28cf95861b5
+          image: cr.yandex/crp10m317mg7ppiikck3/task-manager-frontend:1bc8315d750097b71385e673bfea0a0f7445c543
           ports:
             - containerPort: 80
           resources:
