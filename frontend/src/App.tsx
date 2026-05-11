@@ -87,7 +87,7 @@ function App() {
 	return (
 		<div className={styles.app}>
 			<header className={styles.header}>
-				<h1 className={styles.title}>Task Manager v2</h1>
+				<h1 className={styles.title}>Task Manager v2 Check!</h1>
 				<button className={styles.addBtn} onClick={openCreate}>
           + New Task
 				</button>

@@ -67,7 +67,7 @@ beforeEach(() => {
 describe('App', () => {
 	it('renders Task Manager title', async () => {
 		render(<App />)
-		expect(screen.getByText('Task Manager v2')).toBeInTheDocument()
+		expect(screen.getByText('Task Manager v2 Check!')).toBeInTheDocument()
 	})
 
 	it('renders New Task button', async () => {
