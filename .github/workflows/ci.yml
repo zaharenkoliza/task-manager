@@ -294,6 +294,7 @@ jobs:
           git config user.email "github-actions@github.com"
           git add k8s/backend/deployment.yaml k8s/frontend/deployment.yaml
           git commit -m "ci: update image tags to ${{ github.sha }} [skip ci]"
+          git pull --rebase
           git push
 
   deploy:
