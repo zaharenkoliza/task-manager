@@ -102,7 +102,7 @@ export function TaskFormModal({ task, statuses, priorities, onClose, onSaved }: 
 			onKeyDown={(e) => e.key === 'Escape' && onClose()}
 			role="button"
 			tabIndex={0}
-			aria-label="Close modal"
+			aria-label="Backdrop"
 		>
 			<div
 				className={styles.modal}
