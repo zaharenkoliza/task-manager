@@ -296,10 +296,38 @@ jobs:
           git commit -m "ci: update image tags to ${{ github.sha }}"
           git push
 
+  deploy:
+    name: Deploy via Argo CD
+    runs-on: ubuntu-latest
+    needs: push-to-registry
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Install Argo CD CLI
+        run: |
+          curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          chmod +x /usr/local/bin/argocd
+
+      - name: Sync Argo CD application
+        run: |
+          argocd app sync task-manager \
+            --server ${{ secrets.ARGOCD_SERVER }} \
+            --auth-token ${{ secrets.ARGOCD_TOKEN }} \
+            --insecure \
+            --timeout 120
+
+      - name: Wait for rollout
+        run: |
+          argocd app wait task-manager \
+            --server ${{ secrets.ARGOCD_SERVER }} \
+            --auth-token ${{ secrets.ARGOCD_TOKEN }} \
+            --insecure \
+            --timeout 120
+
   notify-telegram:
     name: Notify Telegram
     runs-on: ubuntu-latest
-    needs: [backend-lint, backend-format-check, backend-test, backend-build, frontend-test, frontend-build, sonarqube-backend, sonarqube-frontend, push-to-registry]
+    needs: [backend-lint, backend-format-check, backend-test, backend-build, frontend-test, frontend-build, sonarqube-backend, sonarqube-frontend, push-to-registry, deploy]
     if: always()
 
     steps:
@@ -327,3 +355,4 @@ jobs:
             SonarQube Backend: ${{ needs.sonarqube-backend.result == 'success' && '✅' || needs.sonarqube-backend.result == 'failure' && '❌' || '⏭️' }}
             SonarQube Frontend: ${{ needs.sonarqube-frontend.result == 'success' && '✅' || needs.sonarqube-frontend.result == 'failure' && '❌' || '⏭️' }}
             Push to Registry: ${{ needs.push-to-registry.result == 'success' && '✅' || needs.push-to-registry.result == 'failure' && '❌' || '⏭️' }}
+            Deploy: ${{ needs.deploy.result == 'success' && '✅' || needs.deploy.result == 'failure' && '❌' || '⏭️' }}

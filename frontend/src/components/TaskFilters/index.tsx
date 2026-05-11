@@ -17,7 +17,7 @@ export function TaskFilters({ filters, statuses, priorities, onChange }: TaskFil
 
 	const update = (key: keyof TaskFiltersType, value: string | number | undefined) => {
 		const v = value === '' || value == null ? undefined : value
-		onChange({ ...filters, [key]: v as never })
+		onChange({ ...filters, [key]: v } as TaskFiltersType)
 	}
 
 	const clear = () => onChange({})

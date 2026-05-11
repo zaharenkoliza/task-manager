@@ -17,28 +17,42 @@ function App() {
 	const [editingTask, setEditingTask] = useState<Task | null>(null)
 
 	useEffect(() => {
-		Promise.all([api.statuses.list(), api.priorities.list()])
-			.then(([s, p]) => {
+		const load = async () => {
+			try {
+				const [s, p] = await Promise.all([api.statuses.list(), api.priorities.list()])
 				setStatuses(s)
 				setPriorities(p)
-			})
-			.catch((e) => setError(String(e instanceof Error ? e.message : String(e))))
+			} catch (e) {
+				setError(e instanceof Error ? e.message : String(e))
+			}
+		}
+		void load()
 	}, [])
 
 	useEffect(() => {
-		setLoading(true)
-		api.tasks
-			.list(filters)
-			.then((data) => {
+		const load = async () => {
+			setLoading(true)
+			try {
+				const data = await api.tasks.list(filters)
 				setTasks(data)
 				setError(null)
-			})
-			.catch((e) => setError(String(e instanceof Error ? e.message : String(e))))
-			.finally(() => setLoading(false))
+			} catch (e) {
+				setError(e instanceof Error ? e.message : String(e))
+			} finally {
+				setLoading(false)
+			}
+		}
+		void load()
 	}, [filters])
 
-	const refreshTasks = () =>
-		api.tasks.list(filters).then(setTasks).catch((e) => setError(String(e instanceof Error ? e.message : String(e))))
+	const refreshTasks = async () => {
+		try {
+			const data = await api.tasks.list(filters)
+			setTasks(data)
+		} catch (e) {
+			setError(e instanceof Error ? e.message : String(e))
+		}
+	}
 
 	const openCreate = () => {
 		setEditingTask(null)
@@ -59,10 +73,15 @@ function App() {
 		if (!confirm('Delete this task?')) return
 		try {
 			await api.tasks.delete(id)
-			refreshTasks()
+			await refreshTasks()
 		} catch (e) {
-			setError(String(e instanceof Error ? e.message : String(e)))
+			setError(e instanceof Error ? e.message : String(e))
 		}
+	}
+
+	const handleSaved = async () => {
+		closeModal()
+		await refreshTasks()
 	}
 
 	return (
@@ -108,10 +127,7 @@ function App() {
 					statuses={statuses}
 					priorities={priorities}
 					onClose={closeModal}
-					onSaved={() => {
-						closeModal()
-						refreshTasks()
-					}}
+					onSaved={handleSaved}
 				/>
 			)}
 		</div>

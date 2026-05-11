@@ -12,9 +12,9 @@ async function handleResponse<T>(res: Response): Promise<T> {
 	}
 	const contentType = res.headers.get('content-type')
 	if (contentType?.includes('application/json')) {
-		return res.json() as Promise<T>
+		return (await res.json()) as T
 	}
-	return res.text() as unknown as T
+	return (await res.text()) as unknown as T
 }
 
 export const api = {
