@@ -55,16 +55,18 @@ export function TaskFilters({ filters, statuses, priorities, onChange }: TaskFil
 				</select>
 			</div>
 			<div className={styles.field}>
-				<label>From</label>
+				<label htmlFor="filter-start-time">From</label>
 				<input
+					id="filter-start-time"
 					type="datetime-local"
 					value={filters.start_time ?? ''}
 					onChange={(e) => update('start_time', e.target.value || undefined)}
 				/>
 			</div>
 			<div className={styles.field}>
-				<label>To</label>
+				<label htmlFor="filter-end-time">To</label>
 				<input
+					id="filter-end-time"
 					type="datetime-local"
 					value={filters.end_time ?? ''}
 					onChange={(e) => update('end_time', e.target.value || undefined)}

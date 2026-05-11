@@ -12,7 +12,7 @@ interface TaskListProps {
 function formatDate(s: string) {
 	try {
 		const d = new Date(s)
-		return isNaN(d.getTime()) ? s : d.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })
+		return Number.isNaN(d.getTime()) ? s : d.toLocaleString(undefined, { dateStyle: 'short', timeStyle: 'short' })
 	} catch {
 		return s
 	}

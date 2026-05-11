@@ -7,7 +7,7 @@ function toInputDatetime(s: string | null | undefined): string {
 	if (!s) return ''
 	try {
 		const d = new Date(s)
-		if (isNaN(d.getTime())) return ''
+		if (Number.isNaN(d.getTime())) return ''
 		const pad = (n: number) => String(n).padStart(2, '0')
 		return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 	} catch (_e) {
@@ -18,7 +18,7 @@ function toInputDatetime(s: string | null | undefined): string {
 function fromInputDatetime(s: string): string | undefined {
 	if (!s?.trim()) return undefined
 	const d = new Date(s)
-	return isNaN(d.getTime()) ? undefined : d.toISOString()
+	return Number.isNaN(d.getTime()) ? undefined : d.toISOString()
 }
 
 interface TaskFormModalProps {
@@ -96,8 +96,21 @@ export function TaskFormModal({ task, statuses, priorities, onClose, onSaved }: 
 	}
 
 	return (
-		<div className={styles.overlay} onClick={onClose}>
-			<div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+		<div
+			className={styles.overlay}
+			onClick={onClose}
+			onKeyDown={(e) => e.key === 'Escape' && onClose()}
+			role="button"
+			tabIndex={0}
+			aria-label="Close modal"
+		>
+			<div
+				className={styles.modal}
+				onClick={(e) => e.stopPropagation()}
+				onKeyDown={(e) => e.stopPropagation()}
+				role="dialog"
+				aria-modal="true"
+			>
 				<div className={styles.header}>
 					<h2>{isEdit ? 'Edit Task' : 'New Task'}</h2>
 					<button type="button" className={styles.closeBtn} onClick={onClose} aria-label="Close">
